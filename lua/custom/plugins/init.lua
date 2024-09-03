@@ -15,7 +15,9 @@ return {
       vim.cmd 'colorscheme gruvbox'
     end,
   },
-  { 'nvim-treesitter/nvim-treesitter-context' },
+  {
+    'nvim-treesitter/nvim-treesitter-context',
+  },
   --isort
   {
     'stsewd/isort.nvim',
@@ -33,6 +35,52 @@ return {
     init = function()
       -- VimTeX configuration goes here, e.g.
       vim.g.vimtex_view_method = 'sioyek'
+    end,
+  },
+  {
+    'mbbill/undotree',
+    config = function()
+      vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle)
+    end,
+  },
+  {
+    'stevearc/oil.nvim',
+    ---@module 'oil'
+    ---@type oil.SetupOpts
+    opts = {},
+    -- Optional dependencies
+    dependencies = { { 'echasnovski/mini.icons', opts = {} } },
+    -- dependencies = { 'nvim-tree/nvim-web-devicons' }, -- use if prefer nvim-web-devicons
+    -- tj config
+    config = function()
+      CustomOilBar = function()
+        local path = vim.fn.expand '%'
+        path = path:gsub('oil://', '')
+        return '  ' .. vim.fn.fnamemodify(path, ':.')
+      end
+
+      require('oil').setup {
+        columns = { 'icon' },
+        keymaps = {
+          ['<C-h>'] = false,
+          ['<C-l>'] = false,
+          ['<C-k>'] = false,
+          ['<C-j>'] = false,
+          ['<M-h>'] = 'actions.select_split',
+        },
+        win_options = {
+          winbar = '%{v:lua.CustomOilBar()}',
+        },
+        view_options = {
+          show_hidden = true,
+        },
+      }
+
+      -- Open parent directory in current window
+      vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
+
+      -- Open parent directory in floating window
+      vim.keymap.set('n', '<space>-', require('oil').toggle_float)
     end,
   },
 }

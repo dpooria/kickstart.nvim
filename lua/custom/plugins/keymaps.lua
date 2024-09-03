@@ -30,7 +30,8 @@ vim.api.nvim_set_keymap('n', '<C-u>', '<C-u>zz', { noremap = true, silent = true
 vim.api.nvim_set_keymap('n', 'n', 'nzzzv', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', 'N', 'Nzzzv', { noremap = true, silent = true })
 -- ThePrimeagen keymaps
-vim.keymap.set('n', '<leader>pv', vim.cmd.Ex)
+-- vim.keymap.set('n', '<leader>pv', vim.cmd.Ex)
+vim.keymap.set('n', '<leader>pv', '<cmd>Oil<CR>')
 -- Highlight move
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
@@ -45,17 +46,15 @@ vim.keymap.set('n', 'N', 'Nzzzv')
 vim.keymap.set('x', '<leader>p', [["_dP]])
 -- next greatest remap ever : asbjornHaland
 -- Yank into systems clipboard
-vim.keymap.set({ 'n', 'v' }, '<leader>y', [["+y]])
-vim.keymap.set('n', '<leader>Y', [["+Y]])
+-- vim.keymap.set({ 'n', 'v' }, '<leader>y', [["+y]])
+-- vim.keymap.set('n', '<leader>Y', [["+Y]])
 
 vim.keymap.set({ 'n', 'v' }, '<leader>d', [["_d]])
 vim.keymap.set({ 'n', 'v' }, '<leader>c', [["_c]])
 vim.keymap.set({ 'n', 'v' }, 'x', [["_x]])
 
--- This is going to get me cancelled
 vim.keymap.set('i', '<C-c>', '<Esc>')
 
-vim.keymap.set('n', '<C-f>', '<cmd>silent !tmux neww tmux-sessionizer<CR>')
 vim.keymap.set('n', '<leader>f', vim.lsp.buf.format)
 
 --vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")
@@ -83,6 +82,7 @@ vim.api.nvim_set_keymap('i', '<C-J>', 'copilot#Accept("<CR>")', { expr = true, s
 -- diable dot
 vim.api.nvim_set_keymap('n', '.', '', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<localleader>n', '<cmd>bnext<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<localleader>p', '<cmd>bprev<CR>', { noremap = true, silent = true })
 local mark = require 'harpoon.mark'
 local ui = require 'harpoon.ui'
 vim.keymap.set('n', '<leader>ha', mark.add_file)
