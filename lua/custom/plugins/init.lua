@@ -134,4 +134,50 @@ return {
       }
     end,
   },
+  {
+    'rrethy/vim-hexokinase',
+    build = 'make hexokinase',
+    event = 'BufRead', -- This will lazy-load the plugin when a buffer is read
+  },
+  {
+    'monaqa/dial.nvim',
+    config = function()
+      local augend = require 'dial.augend'
+      require('dial.config').augends:register_group {
+        default = {
+          augend.integer.alias.decimal,
+          augend.integer.alias.hex,
+          augend.date.alias['%Y/%m/%d'],
+        },
+        typescript = {
+          augend.integer.alias.decimal,
+          augend.integer.alias.hex,
+          augend.constant.new { elements = { 'let', 'const' } },
+        },
+        visual = {
+          augend.integer.alias.decimal,
+          augend.integer.alias.hex,
+          augend.date.alias['%Y/%m/%d'],
+          augend.constant.alias.alpha,
+          augend.constant.alias.Alpha,
+          augend.constant.alias.bool,
+          augend.constant.new { elements = { 'True', 'False' } },
+          --months
+          augend.constant.new {
+            elements = { 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' },
+          },
+          --month abbreviations
+          augend.constant.new {
+            elements = { 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' },
+          },
+        },
+      }
+
+      -- change augends in VISUAL mode
+      -- vim.keymap.set('v', '<C-a>', require('dial.map').inc_visual 'visual', { noremap = true })
+      -- vim.keymap.set('v', '<C-x>', require('dial.map').dec_visual 'visual', { noremap = true })
+      vim.keymap.set('v', '<C-a>', '<cmd>DialIncrement visual<CR>gv', { noremap = true })
+      vim.keymap.set('v', '<C-x>', '<cmd>DialDecrement visual<CR>gv', { noremap = true })
+    end,
+  },
 }

@@ -54,7 +54,6 @@ vim.keymap.set({ 'n', 'v' }, '<leader>c', [["_c]])
 vim.keymap.set({ 'n', 'v' }, 'x', [["_x]])
 
 vim.keymap.set('i', '<C-c>', '<Esc>')
-
 vim.keymap.set('n', '<leader>f', vim.lsp.buf.format)
 
 --vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")
@@ -72,7 +71,6 @@ vim.keymap.set('n', '<leader>x', '<cmd>q<CR>')
 vim.keymap.set('n', '<leader>ll', '<cmd>w<CR>')
 -- Execute macro on multiple lines
 vim.keymap.set('v', '<leader>q', '<cmd>normal @q<CR>')
--- vim.keymap.set("n", ".", "")
 -- isort
 vim.keymap.set('n', '<leader>is', '<cmd>Isort<CR>')
 -- toggle TSContext
@@ -80,7 +78,8 @@ vim.keymap.set('n', '<leader>ts', '<cmd>TSContextToggle<CR>')
 --copilot
 vim.api.nvim_set_keymap('i', '<C-J>', 'copilot#Accept("<CR>")', { expr = true, silent = true })
 -- diable dot
-vim.api.nvim_set_keymap('n', '.', '', { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap('n', '.', '', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('v', 's', '', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<localleader>n', '<cmd>bnext<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<localleader>p', '<cmd>bprev<CR>', { noremap = true, silent = true })
 local mark = require 'harpoon.mark'
@@ -89,16 +88,11 @@ vim.keymap.set('n', '<leader>ha', mark.add_file)
 vim.keymap.set('n', '<leader>hr', mark.rm_file)
 vim.keymap.set('n', '<C-e>', ui.toggle_quick_menu)
 -- repeat indention with > and < in visual mode
--- -- Initialize a variable to store the last operation
--- vim.g.last_op = ''
--- -- Map > for indenting and store the operation
--- vim.api.nvim_set_keymap('v', '>', '>gv:lua vim.g.last_op = ">"<CR>', { noremap = true, silent = true })
--- -- Map < for unindenting and store the operation
--- vim.api.nvim_set_keymap('v', '<', '<gv:lua vim.g.last_op = "<"<CR>', { noremap = true, silent = true })
--- -- Map a key (for example ,.) to repeat the last operation
--- vim.api.nvim_set_keymap('n', ',.', ':lua vim.cmd("normal! " .. vim.g.last_op)<CR>', { noremap = true, silent = true })
 vim.keymap.set('v', '>', '>gv')
 vim.keymap.set('v', '<', '<gv')
+-- cursor
+vim.opt.cursorline = true
+vim.opt.cursorcolumn = true
 -- search on google
 -- Function to search Google with the visually selected text
 local function get_visual_selection()
@@ -122,4 +116,5 @@ function SEARCH_ON_GOOGLE()
 end
 
 vim.keymap.set('v', '<leader>sg', ':<C-u>lua SEARCH_ON_GOOGLE()<CR>', { noremap = true, silent = true })
+
 return {}
