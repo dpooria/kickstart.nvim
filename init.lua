@@ -613,7 +613,7 @@ require('lazy').setup({
               plugins = {
                 pycodestyle = { enabled = false },
                 pydocstyle = { enabled = false },
-                pylint = { enabled = false, ignore = { 'E501' } },
+                pylint = { enabled = false},
                 flake8 = { enabled = true, ignore = { 'E501', 'W503' } },
                 pyflakes = { enabled = false },
                 mccabe = { enabled = false },
@@ -717,7 +717,7 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
-        python = { 'ruff_fix', 'ruff_format', 'ruff_organize_imports' },
+        python = { 'ruff_format', 'ruff_organize_imports' },
         c = { 'clang-format' },
         cpp = { 'clang-format' },
         --
