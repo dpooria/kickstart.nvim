@@ -67,7 +67,7 @@ vim.keymap.set('n', '<leader>j', '<cmd>lprev<CR>zz')
 --SPLIT WINDOW
 vim.keymap.set('n', '<leader>vsp', '<cmd>vsplit<CR>')
 vim.keymap.set('n', '<leader>hsp', '<cmd>split<CR>')
-vim.keymap.set('n', '<leader>x', '<cmd>q<CR>')
+vim.keymap.set('n', '<leader>x', '<cmd>bd<CR>')
 vim.keymap.set('n', '<leader>ll', '<cmd>w<CR>')
 -- Execute macro on multiple lines
 vim.keymap.set('v', '<leader>q', '<cmd>normal @q<CR>')
