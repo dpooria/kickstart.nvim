@@ -67,7 +67,7 @@ vim.keymap.set('n', '<leader>j', '<cmd>lprev<CR>zz')
 --SPLIT WINDOW
 vim.keymap.set('n', '<leader>vsp', '<cmd>vsplit<CR>')
 vim.keymap.set('n', '<leader>hsp', '<cmd>split<CR>')
-vim.keymap.set('n', '<leader>x', '<cmd>bd<CR>')
+vim.keymap.set('n', '<leader>x', '<cmd>q<CR>')
 vim.keymap.set('n', '<leader>ll', '<cmd>w<CR>')
 -- Execute macro on multiple lines
 vim.keymap.set('v', '<leader>q', '<cmd>normal @q<CR>')
@@ -82,6 +82,8 @@ vim.api.nvim_set_keymap('i', '<C-J>', 'copilot#Accept("<CR>")', { expr = true, s
 vim.api.nvim_set_keymap('v', 's', '', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<localleader>n', '<cmd>bnext<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<localleader>p', '<cmd>bprev<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<localleader>x', '<cmd>bd<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<localleader>l', '<cmd>ls<CR>', { noremap = true, silent = true })
 local mark = require 'harpoon.mark'
 local ui = require 'harpoon.ui'
 vim.keymap.set('n', '<leader>ha', mark.add_file)
@@ -116,5 +118,30 @@ function SEARCH_ON_GOOGLE()
 end
 
 vim.keymap.set('v', '<leader>sg', ':<C-u>lua SEARCH_ON_GOOGLE()<CR>', { noremap = true, silent = true })
+
+vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
+  pattern = { '*.vert', '*.frag', '*.geom', '*.glsl' },
+  command = 'set filetype=glsl',
+})
+-- terminal
+vim.api.nvim_create_autocmd('TermOpen', {
+  group = vim.api.nvim_create_namespace('custom-term-open'),
+  callback = function()
+    vim.opt.number = false
+    vim.opt.relativenumber = false
+  end,
+})
+local term_buf = 0
+vim.keymap.set('n', '<leader>ot', function()
+    vim.cmd.vnew()
+    vim.cmd.term()
+    vim.cmd.wincmd("J")
+    vim.api.nvim_win_set_height(0, 5)
+    term_buf = vim.bo.channel
+end)
+vim.keymap.set('n', '<leader>list', function()
+    vim.fn.chansend(term_buf, {"ls\r\n"})
+end)
+
 
 return {}
