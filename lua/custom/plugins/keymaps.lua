@@ -142,6 +142,8 @@ end)
 vim.keymap.set('n', '<leader>list', function()
     vim.fn.chansend(term_buf, {"ls\r\n"})
 end)
+-- set keybind for exiting terminal mode
+vim.keymap.set('t', '<C-[>', '<C-\\><C-n>')
 
 
 return {}
