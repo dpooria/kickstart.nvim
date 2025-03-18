@@ -98,52 +98,108 @@ vim.opt.cursorcolumn = true
 -- search on google
 -- Function to search Google with the visually selected text
 local function get_visual_selection()
-  local s_start = vim.fn.getpos "'<"
-  local s_end = vim.fn.getpos "'>"
-  local n_lines = math.abs(s_end[2] - s_start[2]) + 1
-  local lines = vim.api.nvim_buf_get_lines(0, s_start[2] - 1, s_end[2], false)
-  lines[1] = string.sub(lines[1], s_start[3], -1)
-  if n_lines == 1 then
-    lines[n_lines] = string.sub(lines[n_lines], 1, s_end[3] - s_start[3] + 1)
-  else
-    lines[n_lines] = string.sub(lines[n_lines], 1, s_end[3])
-  end
-  return table.concat(lines, '\n')
+    local s_start = vim.fn.getpos "'<"
+    local s_end = vim.fn.getpos "'>"
+    local n_lines = math.abs(s_end[2] - s_start[2]) + 1
+    local lines = vim.api.nvim_buf_get_lines(0, s_start[2] - 1, s_end[2], false)
+    lines[1] = string.sub(lines[1], s_start[3], -1)
+    if n_lines == 1 then
+        lines[n_lines] = string.sub(lines[n_lines], 1, s_end[3] - s_start[3] + 1)
+    else
+        lines[n_lines] = string.sub(lines[n_lines], 1, s_end[3])
+    end
+    return table.concat(lines, '\n')
 end
 
 function SEARCH_ON_GOOGLE()
-  local query = get_visual_selection():gsub('#', '%%23')
-  local url = 'https://www.google.com/search?q=' .. vim.fn.escape(query, ' ')
-  vim.fn.jobstart({ 'qutebrowser', url }, { detach = true })
+    local query = get_visual_selection():gsub('#', '%%23')
+    local url = 'https://www.google.com/search?q=' .. vim.fn.escape(query, ' ')
+    vim.fn.jobstart({ 'qutebrowser', url }, { detach = true })
 end
 
 vim.keymap.set('v', '<leader>sg', ':<C-u>lua SEARCH_ON_GOOGLE()<CR>', { noremap = true, silent = true })
 
 vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
-  pattern = { '*.vert', '*.frag', '*.geom', '*.glsl' },
-  command = 'set filetype=glsl',
+    pattern = { '*.vert', '*.frag', '*.geom', '*.glsl' },
+    command = 'set filetype=glsl',
 })
 -- terminal
 vim.api.nvim_create_autocmd('TermOpen', {
-  group = vim.api.nvim_create_namespace('custom-term-open'),
-  callback = function()
-    vim.opt.number = false
-    vim.opt.relativenumber = false
-  end,
+    group = vim.api.nvim_create_namespace 'custom-term-open',
+    callback = function()
+        vim.opt.number = false
+        vim.opt.relativenumber = false
+    end,
 })
 local term_buf = 0
 vim.keymap.set('n', '<leader>ot', function()
     vim.cmd.vnew()
     vim.cmd.term()
-    vim.cmd.wincmd("J")
+    vim.cmd.wincmd 'J'
     vim.api.nvim_win_set_height(0, 5)
     term_buf = vim.bo.channel
 end)
 vim.keymap.set('n', '<leader>list', function()
-    vim.fn.chansend(term_buf, {"ls\r\n"})
+    vim.fn.chansend(term_buf, { 'ls\r\n' })
 end)
 -- set keybind for exiting terminal mode
 vim.keymap.set('t', '<C-[>', '<C-\\><C-n>')
 
+vim.keymap.set("n", "<localleader>r", function()
+    local oil = require("oil")
+    local entry = oil.get_cursor_entry()
+    if entry and entry.type == "file" then
+        -- Get the base directory from oil.nvim
+        local base_dir = oil.get_current_dir() or vim.fn.getcwd() -- Fallback to CWD
+        local filepath = vim.fn.fnamemodify(base_dir .. "/" .. entry.name, ":p") -- Create absolute path
 
+        if filepath and filepath ~= "" then
+            local command = vim.fn.input("Shell command: ", "", "shellcmd")
+            if command and command ~= "" then
+                local output = {} -- Table to store command output
+
+                vim.fn.jobstart(command .. " " .. vim.fn.shellescape(filepath), {
+                    stdout_buffered = true,
+                    stderr_buffered = true,
+                    on_stdout = function(_, data)
+                        if data then
+                            for _, line in ipairs(data) do
+                                table.insert(output, line)
+                            end
+                        end
+                    end,
+                    on_stderr = function(_, data)
+                        if data then
+                            for _, line in ipairs(data) do
+                                table.insert(output, line)
+                            end
+                        end
+                    end,
+                    on_exit = function()
+                        -- Display the output in a floating window
+                        if #output > 0 then
+                            local buf = vim.api.nvim_create_buf(false, true)
+                            vim.api.nvim_buf_set_lines(buf, 0, -1, false, output)
+                            vim.api.nvim_open_win(buf, true, {
+                                relative = "editor",
+                                width = math.floor(vim.o.columns * 0.8),
+                                height = math.floor(vim.o.lines * 0.8),
+                                row = math.floor(vim.o.lines * 0.1),
+                                col = math.floor(vim.o.columns * 0.1),
+                                style = "minimal",
+                                border = "rounded",
+                            })
+                        else
+                            print("No output from command.")
+                        end
+                    end,
+                })
+            end
+        else
+            print("Failed to resolve file path.")
+        end
+    else
+        print("Cursor is not on a file.")
+    end
+end, { desc = "Execute shell command on file under cursor and show output" })
 return {}
