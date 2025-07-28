@@ -3,7 +3,7 @@
 --
 -- See the kickstart.nvim README for more information
 return {
-  { 'github/copilot.vim' },
+  -- { 'github/copilot.vim' },
   { 'ThePrimeagen/harpoon' },
   {
     'morhetz/gruvbox',
@@ -45,8 +45,8 @@ return {
         -- overrides = function(colors) -- add/modify highlights
         --     return {}
         -- end,
-        theme = 'wave', -- Load "wave" theme when 'background' option is not set
-        background = { -- map the value of 'background' option to a theme
+        theme = 'wave',    -- Load "wave" theme when 'background' option is not set
+        background = {     -- map the value of 'background' option to a theme
           dark = 'dragon', -- try "dragon" !
           light = 'lotus',
         },
@@ -74,6 +74,7 @@ return {
     -- tag = "v2.15", -- uncomment to pin to a specific release
     init = function()
       -- VimTeX configuration goes here, e.g.
+      vim.g.vimetex_compiler_method = 'pdflatex'
       vim.g.vimtex_view_method = 'sioyek'
     end,
   },
