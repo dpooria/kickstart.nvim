@@ -202,4 +202,8 @@ vim.keymap.set("n", "<localleader>r", function()
         print("Cursor is not on a file.")
     end
 end, { desc = "Execute shell command on file under cursor and show output" })
+
+vim.keymap.set('n', '<localleader>cl', ':<C-u>colorscheme kanagawa-lotus<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<localleader>cd', ':<C-u>colorscheme kanagawa<CR>', { noremap = true, silent = true })
+
 return {}
