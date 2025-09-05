@@ -150,7 +150,7 @@ vim.keymap.set("n", "<localleader>r", function()
     local entry = oil.get_cursor_entry()
     if entry and entry.type == "file" then
         -- Get the base directory from oil.nvim
-        local base_dir = oil.get_current_dir() or vim.fn.getcwd() -- Fallback to CWD
+        local base_dir = oil.get_current_dir() or vim.fn.getcwd()                -- Fallback to CWD
         local filepath = vim.fn.fnamemodify(base_dir .. "/" .. entry.name, ":p") -- Create absolute path
 
         if filepath and filepath ~= "" then
@@ -205,5 +205,6 @@ end, { desc = "Execute shell command on file under cursor and show output" })
 
 vim.keymap.set('n', '<localleader>cl', ':<C-u>colorscheme kanagawa-lotus<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', '<localleader>cd', ':<C-u>colorscheme kanagawa<CR>', { noremap = true, silent = true })
-
+vim.keymap.set('n', '<localleader>t', ':<C-u>split +term<CR>', { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'x' }, 's', '<Nop>')
 return {}
