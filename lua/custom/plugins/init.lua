@@ -168,11 +168,6 @@ return {
         end,
     },
     {
-        'rrethy/vim-hexokinase',
-        build = 'make hexokinase',
-        event = 'BufRead', -- This will lazy-load the plugin when a buffer is read
-    },
-    {
         'monaqa/dial.nvim',
         config = function()
             local augend = require 'dial.augend'

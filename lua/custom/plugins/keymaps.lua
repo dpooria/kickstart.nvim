@@ -207,4 +207,10 @@ vim.keymap.set('n', '<localleader>cl', ':<C-u>colorscheme kanagawa-lotus<CR>', {
 vim.keymap.set('n', '<localleader>cd', ':<C-u>colorscheme kanagawa<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', '<localleader>t', ':<C-u>split +term<CR>', { noremap = true, silent = true })
 vim.keymap.set({ 'n', 'x' }, 's', '<Nop>')
+-- telescope
+local builtin = require('telescope.builtin')
+vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
+vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
+vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
+vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
 return {}
