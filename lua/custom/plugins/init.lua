@@ -73,8 +73,29 @@ return {
         lazy = false, -- we don't want to lazy load VimTeX
         -- tag = "v2.15", -- uncomment to pin to a specific release
         init = function()
-            -- VimTeX configuration goes here, e.g.
-            vim.g.vimetex_compiler_method = 'pdflatex -output-directory=./build'
+            -- Enable filetype detection, plugins, and indentation
+            vim.cmd('filetype plugin indent on')
+
+            -- Enable syntax highlighting
+            vim.cmd('syntax enable')
+
+
+            -- Configure the compiler for VimTeX
+            -- vim.g.vimetex_compiler_method = 'pdflatex'
+            vim.g.vimtex_compiler_latexmk = {
+                executable = 'latexmk',
+                options = {
+                    '-xelatex', -- Specifies the use of XeLaTeX
+                    '-file-line-error',
+                    '-synctex=1',
+                    '-interaction=nonstopmode',
+                    '-shell-escape'
+                },
+            }
+
+            -- Configure the viewer method for VimTeX
+            vim.g.vimtex_view_skim_sync = 1
+            vim.g.vimtex_view_skim_activate = 1
             vim.g.vimtex_view_method = 'sioyek'
         end,
     },
